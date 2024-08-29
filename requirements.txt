@@ -1,0 +1,7 @@
+torch
+pandas
+scikit-learn
+jsonschema
+matplotlib
+seaborn
+tensorboard

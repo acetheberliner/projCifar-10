@@ -1,0 +1,17 @@
+{
+    "data": {
+        "batch_size": 512,
+        "validation_split": 0.20
+    },
+    "training": {
+        "epochs": 30,
+        "learning_rate": 0.002, 
+        "patience": 3,
+        "delta": 0.005
+    },
+    "model": {
+        "architecture": "efficientnet_b2",
+        "input_size": 3072,  
+        "output_size": 10  
+    }
+}

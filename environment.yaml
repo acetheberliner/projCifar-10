@@ -1,0 +1,21 @@
+name: projCifar10
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - pytorch
+  - torchvision
+  - torchaudio
+  - cpuonly
+  - pip
+  - pip:
+    - jsonschema
+    - torch
+    - tensorboard
+    - matplotlib

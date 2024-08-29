@@ -1,0 +1,33 @@
+{
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "object",
+            "properties": {
+                "batch_size": {"type": "integer"},
+                "validation_split": {"type": "number"}
+            },
+            "required": ["batch_size", "validation_split"]
+        },
+        "training": {
+            "type": "object",
+            "properties": {
+                "epochs": {"type": "integer"},
+                "learning_rate": {"type": "number"},
+                "patience": {"type": "integer"},
+                "delta": {"type": "number"}
+            },
+            "required": ["epochs", "learning_rate", "patience", "delta"]
+        },
+        "model": {
+            "type": "object",
+            "properties": {
+                "architecture": {"type": "string"},
+                "input_size": {"type": "integer"},
+                "output_size": {"type": "integer"}
+            },
+            "required": ["architecture", "input_size", "output_size"]
+        }
+    },
+    "required": ["data", "training", "model"]
+}
