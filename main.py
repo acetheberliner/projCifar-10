@@ -44,7 +44,7 @@ def main():
     # la velocità di apprendimento ogni 16 epoche. Dopo 16 epoche, riduce ulteriormente
     # la velocità di apprendimento se la loss non migliora per 2 epoche
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.35, patience=3)
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
 
     # Esegue la funzione di training

@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------------
-Epoca [1/30]: 
-- Train Loss: 1.74
-- Train Accuracy: 37.35%
-- Validation Loss: [33m1.27[0m
-- Validation Accuracy: [33m58.34%[0m
-[34m[ [36m13:53:01 [34m- Tempo impiegato: 308.05s ][0m
+Epoca [13/30]: 
+- Train Loss: 0.57
+- Train Accuracy: 81.26%
+- Validation Loss: [33m0.56[0m
+- Validation Accuracy: [33m80.98%[0m
+[34m[ [36m17:44:34 [34m- Tempo impiegato: 354.12s ][0m
