@@ -6,6 +6,7 @@ import json
 from models.model import CustomModel
 from data.data_loader import load_data
 from utils.clear_console import clear_console
+from utils.time_manager import get_current_time
 
 # Importa la funzione di training
 from codes.train import train
@@ -37,14 +38,24 @@ def main():
     # Crea un'istanza dell'ottimizzatore AdamW con regolarizzazione L2 (weight decay)
     # L'aggiunta di una leggera regolarizzazione può aiutare a prevenire l'overfitting e migliorare la generalizzazione
     # optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4)
-    optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=5e-4) #ex 1e-4
+    optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4) #ex 1e-4
+
+    # Definisci due gruppi di parametri:
+    # - Uno per i layer convolutivi pre-addestrati (con learning rate basso)
+    # - Uno per i nuovi layer del classificatore (con learning rate più alto)
+    # optimizer = optim.AdamW([
+    #     {'params': model.base_model.features[-3:].parameters(), 'lr': config['training']['learning_rate'] * 0.1},
+    #     {'params': model.base_model.classifier.parameters(), 'lr': config['training']['learning_rate']}
+    # ], weight_decay=1e-4)
+
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2) #ex 0.5 / 3
+    # scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=config['training']['learning_rate'], steps_per_epoch=len(train_loader), epochs=config['training']['epochs'])
 
 
     # Crea un'istanza dello scheduler di learning rate (CosineAnnealingLR) che riduce
     # la velocità di apprendimento ogni 16 epoche. Dopo 16 epoche, riduce ulteriormente
     # la velocità di apprendimento se la loss non migliora per 2 epoche
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.35, patience=3)
+    # scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
 
     # Esegue la funzione di training
@@ -54,5 +65,5 @@ def main():
 if __name__ == "__main__":
     clear_console()
 
-    print(f'\033[36mCiclo di allenamento avviato, attendere... \33[0m')
+    print(f'\033[36mCiclo di allenamento avviato alle ore [ {get_current_time()} ], attendere... \33[0m')
     main()

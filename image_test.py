@@ -1,14 +1,20 @@
 import os
-from PIL import Image
-import torchvision.transforms as transforms
 import torch
 import matplotlib.pyplot as plt
+import torchvision.transforms as transforms
+
+from PIL import Image # Carica la libreria PIL (Python Imaging Library) che serve per leggere e manipolare le immagini
 
 from models.model import CustomModel
 from utils.clear_console import clear_console
 
 # Funzione per preprocessare l'immagine
 def preprocess_image(image_path):
+    """
+    Preprocessa l'immagine per renderla adatta all'input del modello.
+    Stampa le dimensioni dell'immagine, la converte in un tensore e normalizza
+    i valori dei pixel.
+    """
     transform = transforms.Compose([
         transforms.Resize((32, 32)),
         transforms.ToTensor(),
@@ -20,6 +26,10 @@ def preprocess_image(image_path):
 
 # Funzione per caricare il modello
 def load_model(model_path, input_size, output_size):
+    """
+    Carica il modello dal file specificato e lo configura per l'input e l'output
+    specificati.
+    """
     model = CustomModel(input_size, output_size)
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=True))
     model.eval()
@@ -27,6 +37,10 @@ def load_model(model_path, input_size, output_size):
 
 # Funzione per effettuare una previsione con il modello
 def predict(image, model):
+    """
+    Effettua una previsione sull'immagine specificata utilizzando il modello.
+    Restituisce la classe predetta.
+    """
     with torch.no_grad():
         output = model(image)
         _, predicted = torch.max(output, 1)
@@ -34,6 +48,9 @@ def predict(image, model):
 
 # Funzione principale
 def main():
+    """
+    Funzione principale che gestisce l'input utente e effettua le previsioni.
+    """
     input_size = 32 * 32 * 3  # Dimensione dell'input
     output_size = 10  # Numero di classi
 
@@ -65,7 +82,7 @@ def main():
             image_folder = os.path.join(base_folder, selected_category)
             images = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))]
 
-            print(f"\n\033[36mSeleziona un'immagine di test della categoria '\033[33m{selected_category}\033[0m \033[36m':\033[0m")
+            print(f"\033[36mSeleziona un'immagine di test della categoria '\033[33m{selected_category}\033[0m \033[36m':\033[0m")
             for i, image in enumerate(images):
                 print(f"\033[33m[{i + 1}]\033[0m - {image}")
 
@@ -77,8 +94,15 @@ def main():
             img = plt.imread(selected_image)
 
             print(f'\033[32m* Predizione immagine: \033[33m{class_names[prediction]}\033[0m')
-            print("\n[Chiudere scheda 'Figure 1' per continuare..]")
+            print("\n[Chiudere scheda 'Immagine selezionata' per continuare]")
             plt.imshow(img)
+            
+            # Ottieni la figura corrente e imposta il titolo della finestra
+            plt.gcf().canvas.manager.set_window_title("Immagine selezionata")
+            plt.gcf().set_facecolor("white")
+            plt.axis("off")
+            plt.grid(False)
+            plt.title(f"{images[img_choice - 1]}")            
             plt.show()
 
         except (ValueError, IndexError):
@@ -86,3 +110,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

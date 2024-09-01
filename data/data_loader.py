@@ -7,25 +7,32 @@ from utils.console_output_manager import enable_stdout
 
 # Funzione per caricare i dati
 def load_data(config):
+    """
+    Carica il dataset CIFAR-10 e crea i DataLoader per il training e validation set.
+
+    Args:
+    config (dict): dizionario contenente le informazioni di configurazione per l'addestramento del modello.
+
+    Returns:
+    train_loader (DataLoader): oggetto per iterare sul dataset di training.
+    val_loader (DataLoader): oggetto per iterare sul dataset di validazione.
+    """
     suppress_stdout()
 
-    # Definisce le trasformazioni per il training set
+    # Definisce le trasformazioni per le immagini
     train_transform = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(32, padding=4),
-        transforms.RandomRotation(10),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
-        transforms.ToTensor(),  # Converte l'immagine in un tensore di PyTorch
-        # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.RandomHorizontalFlip(), # Ruota l'immagine di 90 gradi in senso orario
+        transforms.RandomCrop(32, padding=4), # Esegue un crop di 32x32
+        transforms.RandomRotation(15), # Ruota l'immagine di 15 gradi in senso orario
+        transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1), # Modifica i parametri delle immagini
+        transforms.ToTensor(), # Converte l'immagine in un tensore
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) # Normalizza i valori dei tensori
     ])
 
-
-    # Definisce le trasformazioni per il validation set
     val_transform = transforms.Compose([
-        transforms.Resize(224),  # Resize per EfficientNet
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        transforms.Resize(224), # Rimappa le immagini a 224x224
+        transforms.ToTensor(), # Converte l'immagine in un tensore
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]), # Normalizza i valori dei tensori
     ])
 
     # Carica il dataset CIFAR-10
@@ -46,3 +53,4 @@ def load_data(config):
     enable_stdout()
 
     return train_loader, val_loader
+
