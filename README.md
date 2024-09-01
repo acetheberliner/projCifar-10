@@ -27,6 +27,7 @@ appunto in 10 classi.
   - `clear_console.py`: utilità per pulire la console e garantire un'esperienza di esecuzione più "pulita"
   - `console_output_manager.py`: utilità per gestire sopprimere/permettere gli output a terminale per evitare "fastidiosi" messaggi come future-warnings, ...
   - `save_epoch_output.py`: utilità che scrive su un file .txt il risultato migliore dell'ultimo ciclo di allenamento eseguito
+  - `time_manager.py`: utilità per la gestione del tempo all'interno del programma
 
 - `testing_images/`: archivio di immagini con il quale verificare la corretteza del modello
   
