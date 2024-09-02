@@ -5,6 +5,7 @@ import json
 # Importa il modello personalizzato e il data loader
 from models.model import CustomModel
 from data.data_loader import load_data
+
 from utils.clear_console import clear_console
 from utils.time_manager import get_current_time
 
