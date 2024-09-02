@@ -23,45 +23,19 @@ def main():
     # Crea un'istanza del modello personalizzato
     model = CustomModel(config['model']['input_size'], config['model']['output_size'])
 
-    # Definisce la funzione di perdita (CrossEntropyLoss)
-    criterion = torch.nn.CrossEntropyLoss(reduction='mean')  # Imposta la riduzione della perdita a somma (non media)
+    # misura la differenza tra le probabilità previste dal modello e le etichette vere in un problema di classificazione, penalizzando previsioni lontane dalla realtà per migliorare l'accuratezza
+    criterion = torch.nn.CrossEntropyLoss(reduction='mean')
 
-    # spiegazione: la funzione CrossEntropyLoss è una funzione di perdita (o loss) che è utilizzata per calcolare la perdita in un problema di classificazione multiclasse.
-    # In questo caso, il criterio di calcolo della perdita è definito come la somma (non la media) del logaritmo del valore di verità per ogni classe.
-    # In altre parole, la perdita è la somma del logaritmo del valore di verità per ogni esempio.
-    # Questo può aumentare la precisione del modello, in quanto riduce la sensibilità rispetto alla perdita media.
-    # Nota: l'utilizzo della somma invece della media è utile nel caso in cui vogliamo utilizzare lo scheduler di learning rate per ridurre la velocità di apprendimento.
-    # In questo caso, utilizzando la somma si ottiene una misura più accurata della perdita totale.
-    # Nota2: è possibile modificare la funzione di perdita per ottenere una misura della perdita media, basta rimuovere il parametro 'reduction' oppure impostarlo a 'elementwise_mean'.
+    # serve ad aggiornare i pesi del modello durante l'addestramento, riducendo il rischio di overfitting grazie alla regolarizzazione L2 (una tecnica che penalizza i pesi di un modello durante l'addestramento)
+    optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4)
 
-
-    # Crea un'istanza dell'ottimizzatore AdamW con regolarizzazione L2 (weight decay)
-    # L'aggiunta di una leggera regolarizzazione può aiutare a prevenire l'overfitting e migliorare la generalizzazione
-    # optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4)
-    optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4) #ex 1e-4
-
-    # Definisci due gruppi di parametri:
-    # - Uno per i layer convolutivi pre-addestrati (con learning rate basso)
-    # - Uno per i nuovi layer del classificatore (con learning rate più alto)
-    # optimizer = optim.AdamW([
-    #     {'params': model.base_model.features[-3:].parameters(), 'lr': config['training']['learning_rate'] * 0.1},
-    #     {'params': model.base_model.classifier.parameters(), 'lr': config['training']['learning_rate']}
-    # ], weight_decay=1e-4)
-
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2) #ex 0.5 / 3
-    # scheduler = optim.lr_scheduler.OneCycleLR(optimizer, max_lr=config['training']['learning_rate'], steps_per_epoch=len(train_loader), epochs=config['training']['epochs'])
-
-
-    # Crea un'istanza dello scheduler di learning rate (CosineAnnealingLR) che riduce
-    # la velocità di apprendimento ogni 16 epoche. Dopo 16 epoche, riduce ulteriormente
-    # la velocità di apprendimento se la loss non migliora per 2 epoche
-    # scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
-    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
+    # riduce automaticamente il tasso di apprendimento quando le prestazioni del modello non migliorano per un certo numero di epoche
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=2)
 
     # Esegue la funzione di training
     train(model, train_loader, val_loader, criterion, optimizer, scheduler, config)
 
-# Esegue la funzione principale se il file è eseguito direttamente
+# Esegue la funzione principale
 if __name__ == "__main__":
     clear_console()
 
