@@ -14,6 +14,7 @@ appunto in 10 classi.
   - `data_loader.py`: file di caricamento dei dati che scarica il dataset in caso di prima esecuzione e si occupa di pre-processing
     
 - `models/`: definizione del modello:
+  - `model.py`: file contenente la struttura del modello basato su EfficientNet
   - `best_model.pth`: salvataggio del modello migliore in fase di allenamento
     
 - `notebooks/`: analisi dei dati.
