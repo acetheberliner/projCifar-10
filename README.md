@@ -7,6 +7,11 @@ In questo progetto, ho affrontato il problema della classificazione delle immagi
 
 ![Immagine1](https://github.com/user-attachments/assets/27d18f0c-ed73-4a38-b7ee-2528aac291d4)
 
+## Come eseguire il codice?
+- Per eseguire e visualizzare il corretto funzionamento del processo di apprendimento del modello eseguire in pirmis l'installazione dell'env conda chiamato "projCifar10" a partire dal file environment.yaml (vedi istruzioni nel report) e successivamente eseguire lo script "python main.py".
+  
+- Per invece testare le prestazioni del modello appena allenatno su un set di immagini esterne ai batch di training e validation, eseguire lo script "python image_test.py"
+  
 ## Struttura del Progetto
 - `config/`: file di configurazione:
   - `config.json`: iper-parametri di configurazione
