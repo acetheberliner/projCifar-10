@@ -3,8 +3,7 @@ import torch
 import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
 
-from PIL import Image # Carica la libreria PIL (Python Imaging Library) che serve per leggere e manipolare le immagini
-
+from PIL import Image  # Libreria per leggere e manipolare le immagini
 from models.model import CustomModel
 from utils.clear_console import clear_console
 
@@ -12,8 +11,6 @@ from utils.clear_console import clear_console
 def preprocess_image(image_path):
     """
     Preprocessa l'immagine per renderla adatta all'input del modello.
-    Stampa le dimensioni dell'immagine, la converte in un tensore e normalizza
-    i valori dei pixel.
     """
     transform = transforms.Compose([
         transforms.Resize((32, 32)),
@@ -24,15 +21,15 @@ def preprocess_image(image_path):
     image = transform(image).unsqueeze(0)  # Aggiunge una dimensione batch
     return image
 
-# Funzione per caricare il modello
-def load_model(model_path, input_size, output_size):
+# Funzione per caricare il modello dal checkpoint
+def load_model(model_path):
     """
-    Carica il modello dal file specificato e lo configura per l'input e l'output
-    specificati.
+    Carica il modello e lo stato dell'ottimizzatore dal file di checkpoint specificato.
     """
-    model = CustomModel(input_size, output_size)
-    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'), weights_only=True))
-    model.eval()
+    model = CustomModel(output_size=10)  # Specifica il numero di classi per il modello CIFAR-10
+    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+    model.load_state_dict(checkpoint['model_state_dict'])
+    model.eval()  # Imposta il modello in modalità valutazione
     return model
 
 # Funzione per effettuare una previsione con il modello
@@ -51,14 +48,11 @@ def main():
     """
     Funzione principale che gestisce l'input utente e effettua le previsioni.
     """
-    input_size = 32 * 32 * 3  # Dimensione dell'input
-    output_size = 10  # Numero di classi
-
     class_names = ['Aeroplano', 'Automobile', 'Uccello', 'Gatto', 'Cervo/Daino', 'Cane', 'Rana', 'Cavallo', 'Nave/Barca', 'Camion']
     model_path = 'models/best_model.pth'
     base_folder = './testing_images'
     
-    model = load_model(model_path, input_size, output_size)
+    model = load_model(model_path)
     categories = [d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d))]
 
     while True:
@@ -110,4 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

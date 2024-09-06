@@ -43,11 +43,10 @@ def load_data(config):
     if config['data']['validation_split'] > 0:
         val_size = int(config['data']['validation_split'] * len(train_dataset))
         train_size = len(train_dataset) - val_size
-        train_dataset, val_dataset = random_split(train_dataset, [train_size, val_size])
+        train_dataset, val_dataset = random_split(train_dataset, [train_size, val_size], generator=torch.Generator().manual_seed(42))
 
     # Crea i DataLoader per il training e validation set
-    num_workers = 8 if torch.cuda.is_available() else 0
-    train_loader = DataLoader(train_dataset, batch_size=config['data']['batch_size'], shuffle=True, num_workers=num_workers)
+    train_loader = DataLoader(train_dataset, batch_size=config['data']['batch_size'], shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=config['data']['batch_size'], shuffle=False)
 
     enable_stdout()
