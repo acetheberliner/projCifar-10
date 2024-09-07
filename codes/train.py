@@ -42,7 +42,6 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
         for epoch in range(start_epoch, epochs):
             start_time = time.time()
 
-            # Inizia addestramento
             model.train()
             running_loss = 0.0
             correct = 0
@@ -52,11 +51,11 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
 
             # Itera sul dataset di training
             for i, (inputs, labels) in enumerate(tqdm(train_loader, desc='Training...', ncols=100)):
-                optimizer.zero_grad()
-                outputs = model(inputs)
-                loss = criterion(outputs, labels)
-                loss.backward()
-                optimizer.step()
+                optimizer.zero_grad() # Azzera i gradienti
+                outputs = model(inputs) # Forward pass
+                loss = criterion(outputs, labels) # Calcolo della perdita
+                loss.backward() # Calcolo dei gradienti
+                optimizer.step() # Aggiornamento dei pesi
 
                 running_loss += loss.item()
                 _, predicted = torch.max(outputs, 1)
