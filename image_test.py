@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 from PIL import Image  # Libreria per leggere e manipolare le immagini
 from models.model import CustomModel
 from utils.clear_console import clear_console
+from utils.class_names import class_names
 
 # Funzione per preprocessare l'immagine
 def preprocess_image(image_path):
@@ -48,7 +49,6 @@ def main():
     """
     Funzione principale che gestisce l'input utente e effettua le previsioni.
     """
-    class_names = ['Aeroplano', 'Automobile', 'Uccello', 'Gatto', 'Cervo/Daino', 'Cane', 'Rana', 'Cavallo', 'Nave/Barca', 'Camion']
     model_path = 'models/best_model.pth'
     base_folder = './testing_images'
     
