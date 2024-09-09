@@ -1,0 +1,1 @@
+class_names = ['Aeroplano', 'Automobile', 'Uccello', 'Gatto', 'Cervo/Daino', 'Cane', 'Rana', 'Cavallo', 'Nave/Barca', 'Camion']
