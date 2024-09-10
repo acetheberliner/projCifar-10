@@ -31,7 +31,7 @@ class EarlyStopping:
             print(f'\033[34mEarly stopping counter: {self.counter} / {self.patience}\033[0m\n')
             if self.counter >= self.patience:
                 self.early_stop = True
-                print(f'\033[31mEarly stopping triggered: Fine allenamento\033[0m\n')
+                print(f'\033[31mEarly stopping attivato: Fine allenamento\033[0m\n')
                 alert()
         else:
             self.best_score = score
@@ -39,6 +39,15 @@ class EarlyStopping:
             self.counter = 0
 
     def save_checkpoint(self, val_loss, model, optimizer, epoch):
+        """
+        Salva il modello migliore e lo stato dell'ottimizzatore su disco.
+        
+        Args:
+            val_loss (float): Valore della loss di validazione
+            model (nn.Module): Modello personalizzato
+            optimizer (torch.optim.Optimizer): Ottimizzatore
+            epoch (int): Numero di epoca
+        """
         print(f'\033[32mValidation loss diminuita ({self.val_loss_min:.2f} --> {val_loss:.2f}), salvataggio nuovo modello migliore...\033[0m\n')
         beep()
         torch.save({
