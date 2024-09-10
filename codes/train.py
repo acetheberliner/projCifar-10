@@ -80,7 +80,7 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
             print("-------------------------------------------------------------------------------------------------------")
 
             # Itera sul dataset di training
-            for i, (inputs, labels) in enumerate(tqdm(train_loader, desc='Training...', ncols=100)):
+            for i, (inputs, labels) in enumerate(tqdm(train_loader, desc='Training...', ncols=100, unit='step')):
                 optimizer.zero_grad()
                 outputs = model(inputs)
                 loss = criterion(outputs, labels)
