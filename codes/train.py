@@ -137,10 +137,6 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
             scheduler.step(val_loss)
 
             early_stopping(val_loss, model, optimizer, epoch)
-
-            if early_stopping.early_stop:
-                print("\033[31mEarly stopping attivato\033[0m")
-                break
     
     except KeyboardInterrupt:
         print("\n\033[31mTraining interrotto manualmente\033[0m")
@@ -151,10 +147,10 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
     finally:
         total_time_formatted = format_total_time(sum_time)
         print(f'\n\033[34m[ Tempo totale impiegato: {total_time_formatted} ]\033[0m')
-        if not writer._closed:
-            try:
-                writer.close()
-            except Exception as e:
-                print(f"Errore durante la chiusura di TensorBoard: {e}")
+        
+        if writer:
+            writer.flush()  # Flush dei dati rimanenti
+            writer.close()  # Chiudi correttamente il SummaryWriter
+        
         if early_stopping.best_epoch_output:
             save_epoch_output(early_stopping.best_epoch_output)
