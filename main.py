@@ -35,7 +35,7 @@ def main():
 
     # riduce automaticamente il tasso di apprendimento quando le prestazioni del modello non migliorano per un certo numero di epoche
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2)
-    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5) <----------- per AdaGrad
+    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5) <----------- per AdaGrad (impostare inoltre in config.json lr=0.0025 e batch_size=256)
 
     # Chiede all'utente se vuole iniziare da un checkpoint o da zero
     choice = input("\nAvviare un nuovo addestramento [\033[35mN\033[0m] | Riprendere dall'ultimo checkpoint [\033[35mR\033[0m]: ").strip().lower()
