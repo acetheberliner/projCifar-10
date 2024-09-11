@@ -31,9 +31,11 @@ def main():
 
     # serve ad aggiornare i pesi del modello durante l'addestramento
     optimizer = optim.AdamW(model.parameters(), lr=config['training']['learning_rate'], weight_decay=1e-4)
+    # optimizer = optim.Adagrad(model.parameters(), lr=config['training']['learning_rate'], weight_decay=5e-4) <----------- AdaGrad
 
     # riduce automaticamente il tasso di apprendimento quando le prestazioni del modello non migliorano per un certo numero di epoche
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2)
+    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=5) <----------- per AdaGrad
 
     # Chiede all'utente se vuole iniziare da un checkpoint o da zero
     choice = input("\nAvviare un nuovo addestramento [\033[35mN\033[0m] | Riprendere dall'ultimo checkpoint [\033[35mR\033[0m]: ").strip().lower()
