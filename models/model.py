@@ -1,7 +1,11 @@
 import torch.nn as nn
-from torchvision.models import efficientnet_b2, efficientnet_b0, EfficientNet_B2_Weights, EfficientNet_B0_Weights
-
+from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
+from torchvision.models import efficientnet_b2, EfficientNet_B2_Weights
 from torchvision.models import mobilenet_v2, MobileNet_V2_Weights
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# TEST CON EFFICIENTNET-B0: MIGLIORI PRESTAZIONI OTTENUTE TRA I TEST
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 class CustomModel(nn.Module):
     def __init__(self, output_size):
@@ -14,7 +18,12 @@ class CustomModel(nn.Module):
 
     def forward(self, x):
         return self.base_model(x)
-    
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# TEST CON MOBILENET: PIU LEGGERO E VELOCE MA CON PRESTAZIONI NON OTTIMALI
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# class CustomModel(nn.Module):
     # def __init__(self, output_size):
     #     super(CustomModel, self).__init__()
     #     self.base_model = mobilenet_v2(weights=MobileNet_V2_Weights.DEFAULT)
@@ -23,6 +32,9 @@ class CustomModel(nn.Module):
     # def forward(self, x):
     #     return self.base_model(x)
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# TEST CON MODELLO CUSTOM: PERSONALIZZATO A PARTIRE DA EFFICIENTNET-B2 MA CON PRESTAZIONI NON OTTIMALI
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # class CustomModel(nn.Module):
 #     """
