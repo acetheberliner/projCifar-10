@@ -10,7 +10,7 @@ from torchvision.models import mobilenet_v2, MobileNet_V2_Weights
 class CustomModel(nn.Module):
     def __init__(self, output_size):
         super(CustomModel, self).__init__()
-        # Carica il modello EfficientNet-B2 pre-addestrato
+        # Carica il modello EfficientNet-B0 pre-addestrato
         self.base_model = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
         
         # Modifica l'ultimo layer per il numero di output desiderato
