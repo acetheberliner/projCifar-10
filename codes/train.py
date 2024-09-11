@@ -79,20 +79,19 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
 
             print("-------------------------------------------------------------------------------------------------------")
 
-            # Itera sul dataset di training
+            # Usa tqdm con catch per evitare l'errore di interruzione
             for i, (inputs, labels) in enumerate(tqdm(train_loader, desc='Training...', ncols=100, unit='step')):
                 optimizer.zero_grad()
                 outputs = model(inputs)
                 loss = criterion(outputs, labels)
                 loss.backward()
-                optimizer.step()
+                optimizer.step() 
 
                 running_loss += loss.item()
                 _, predicted = torch.max(outputs, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
-                # Salva le etichette e le predizioni per la confusion matrix
                 all_labels.extend(labels.cpu().numpy())
                 all_preds.extend(predicted.cpu().numpy())
 
@@ -137,12 +136,14 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
             scheduler.step(val_loss)
 
             early_stopping(val_loss, model, optimizer, epoch)
+
+            if early_stopping.early_stop:
+                break
     
     except KeyboardInterrupt:
         print("\n\033[31mTraining interrotto manualmente\033[0m")
         if last_epoch_output:
             save_epoch_output(last_epoch_output)  # Salva l'output dell'ultima epoca prima dell'interruzione
-            raise
 
     finally:
         total_time_formatted = format_total_time(sum_time)
@@ -154,3 +155,4 @@ def train(model, train_loader, val_loader, criterion, optimizer, scheduler, conf
         
         if early_stopping.best_epoch_output:
             save_epoch_output(early_stopping.best_epoch_output)
+
